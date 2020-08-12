@@ -15,6 +15,11 @@ export class ShoppingListService {
 
     addIngredient(ingredient: Ingredient) {
         this.ingredients.push(ingredient);
-        this.ingredientsChanged.emit(this.ingredients.slice());
+        this.ingredientsChanged.emit(this.getIngredients());
+    }
+
+    addIngredients(ingredients: Ingredient[]) {
+        this.ingredients.push(...ingredients); // use spread operator to pass each item of array as separate argument
+        this.ingredientsChanged.emit(this.getIngredients());
     }
 }
