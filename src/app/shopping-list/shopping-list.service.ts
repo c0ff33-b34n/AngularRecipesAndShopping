@@ -27,4 +27,9 @@ export class ShoppingListService {
         this.ingredients.push(...ingredients); // use spread operator to pass each item of array as separate argument
         this.ingredientsChanged.next(this.getIngredients());
     }
+
+    updateIngredient(index: number, ingredient: Ingredient) {
+        this.ingredients[index] = ingredient;
+        this.ingredientsChanged.next(this.ingredients.slice());
+    }
 }
