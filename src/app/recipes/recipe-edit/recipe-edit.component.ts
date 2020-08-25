@@ -46,12 +46,16 @@ export class RecipeEditComponent implements OnInit {
           Validators.pattern(/^[1-9]+[0-9]*$/)
         ])
       })
-      );
-    }
+    );
+  }
 
-    onCancel() {
-      this.router.navigate(['../'], {relativeTo: this.route});
-    }
+  onDeleteIngredient(index: number) {
+    (this.recipeForm.get('ingredients') as FormArray).removeAt(index);
+  }
+
+  onCancel() {
+    this.router.navigate(['../'], {relativeTo: this.route});
+  }
 
   private initForm() {
     let recipeName = '';
