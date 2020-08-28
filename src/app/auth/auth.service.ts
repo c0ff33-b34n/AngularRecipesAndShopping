@@ -59,6 +59,7 @@ export class AuthService {
             userId,
             token,
             expirationDate);
+        this.user.next(user);
     }
 
     private handleError(errorRes: HttpErrorResponse) {
