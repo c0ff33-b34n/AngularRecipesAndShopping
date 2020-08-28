@@ -40,6 +40,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+auth.apikey.ts
 
 # System Files
 .DS_Store
