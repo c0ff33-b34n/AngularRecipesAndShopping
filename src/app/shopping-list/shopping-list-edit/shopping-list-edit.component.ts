@@ -16,32 +16,31 @@ export class ShoppingListEditComponent implements OnInit, OnDestroy {
   @ViewChild('f', { static: false }) slForm: NgForm;
   subscription: Subscription;
   editMode = false;
-  editedItemIndex: number;
   editedItem: Ingredient;
 
   constructor(private slService: ShoppingListService,
               private store: Store<fromShoppingList.AppState>) { }
 
   ngOnInit() {
-    this.subscription = this.slService.startedEditing.subscribe(
-      (index: number) => {
-        this.editedItemIndex = index;
+    this.subscription = this.store.select('shoppingList').subscribe(stateData => {
+      if (stateData.editedIngredientIndex > -1) {
         this.editMode = true;
-        this.editedItem = this.slService.getIngredient(index); // get the ingredient based on index passed
-                                                               // when shopping list component is selected
+        this.editedItem = stateData.editedIngredient;
         this.slForm.setValue({
           name: this.editedItem.name,
           amount: this.editedItem.amount
         });
+      } else {
+        this.editMode = false;
       }
-    );
+    });
   }
 
   onAddItem(form: NgForm) {
     const value = form.value;
     const ingredient = new Ingredient(value.name, value.amount);
     if (this.editMode) {
-      this.store.dispatch(new SLA.UpdateIngredient({index: this.editedItemIndex, ingredient}));
+      this.store.dispatch(new SLA.UpdateIngredient(ingredient));
     } else {
       this.store.dispatch(new SLA.AddIngredient(ingredient));
     }
@@ -52,14 +51,16 @@ export class ShoppingListEditComponent implements OnInit, OnDestroy {
   onClear() {
     this.editMode = false;
     this.slForm.reset();
+    this.store.dispatch(new SLA.StopEdit());
   }
 
   onDelete() {
-    this.store.dispatch(new SLA.DeleteIngredient(this.editedItemIndex));
+    this.store.dispatch(new SLA.DeleteIngredient());
     this.onClear();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.store.dispatch(new SLA.StopEdit());
   }
 }
