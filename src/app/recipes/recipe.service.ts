@@ -4,6 +4,8 @@ import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as SLA from '../shopping-list/store/shopping-list.actions';
 
 @Injectable()
 export class RecipeService {
@@ -37,7 +39,8 @@ export class RecipeService {
     //   ]; // Dummy data in case I want to repopulate it if it is lost on the server.
     private recipes: Recipe[] = [];
 
-    constructor(private slService: ShoppingListService) {}
+    constructor(private slService: ShoppingListService,
+                private store: Store<{shoppingList: {ingredients: Ingredient[]}}>) {}
 
     getRecipes() {
         return this.recipes.slice(); // slice returns a copy of the array, otherwise it would pass a reference.
@@ -53,7 +56,7 @@ export class RecipeService {
     }
 
     addIngredientsToShoppingList(ingredients: Ingredient[]) {
-        this.slService.addIngredients(ingredients);
+        this.store.dispatch(new SLA.AddIngredients(ingredients));
     }
 
     addRecipe(recipe: Recipe) {
