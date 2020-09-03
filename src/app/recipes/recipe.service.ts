@@ -5,7 +5,7 @@ import { Ingredient } from '../shared/ingredient.model';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as SLA from '../shopping-list/store/shopping-list.actions';
-import * as fromShoppingList from '../shopping-list/store/shopping-list.reducer';
+import * as fromApp from '../store/app.reducer';
 
 @Injectable()
 export class RecipeService {
@@ -39,7 +39,7 @@ export class RecipeService {
     //   ]; // Dummy data in case I want to repopulate it if it is lost on the server.
     private recipes: Recipe[] = [];
 
-    constructor(private store: Store<fromShoppingList.AppState>) {}
+    constructor(private store: Store<fromApp.AppState>) {}
 
     getRecipes() {
         return this.recipes.slice(); // slice returns a copy of the array, otherwise it would pass a reference.
