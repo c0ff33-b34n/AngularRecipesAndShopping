@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, tap, take, exhaustMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { map, tap } from 'rxjs/operators';
 import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipe.model';
 import { AuthService } from '../auth/auth.service';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../store/app.reducer';
+import * as RecipeActions from '../recipes/store/recipe.actions';
 
 @Injectable()
 export class DataStorageService {
     constructor(private http: HttpClient,
                 private recipeService: RecipeService,
-                private authService: AuthService) {}
+                private authService: AuthService,
+                private store: Store<fromApp.AppState>) {}
 
     storeRecipes() {
         const recipes = this.recipeService.getRecipes();
@@ -29,7 +33,7 @@ export class DataStorageService {
                 }); // JS map array method
             }),
             tap(recipes => {
-            this.recipeService.setRecipes(recipes);
+            this.store.dispatch(new RecipeActions.SetRecipes(recipes));
             })
         ); // take will only take 1 value from observable before automatically unsubscribing.
     } // exhaustMap allows you to combine observables
