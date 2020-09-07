@@ -5,16 +5,18 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { ShoppingListService } from './shopping-list/shopping-list.service';
 import { AppRoutingModule } from './app-routing.module';
-import { RecipeService } from './recipes/recipe.service';
-import { DataStorageService } from './shared/data-storage.service';
 import { RecipesResolverService } from './recipes/recipes-resolver.service';
 import { AuthComponent } from './auth/auth.component';
 import { AuthService } from './auth/auth.service';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { AuthGuard } from './auth/auth.guard';
 import { SharedModule } from './shared/shared.module';
+import { StoreModule } from '@ngrx/store';
+import * as fromApp from './store/app.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth/store/auth.effects';
+import { RecipeEffects } from './recipes/store/recipe.effects';
 
 @NgModule({
   declarations: [
@@ -28,12 +30,11 @@ import { SharedModule } from './shared/shared.module';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects])
   ],
   providers: [
-    ShoppingListService,
-    RecipeService,
-    DataStorageService,
     RecipesResolverService,
     AuthService,
     AuthGuard,
