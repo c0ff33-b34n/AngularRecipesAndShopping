@@ -6,8 +6,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app-routing.module';
-import { RecipeService } from './recipes/recipe.service';
-import { DataStorageService } from './shared/data-storage.service';
 import { RecipesResolverService } from './recipes/recipes-resolver.service';
 import { AuthComponent } from './auth/auth.component';
 import { AuthService } from './auth/auth.service';
@@ -37,8 +35,6 @@ import { RecipeEffects } from './recipes/store/recipe.effects';
     EffectsModule.forRoot([AuthEffects, RecipeEffects])
   ],
   providers: [
-    RecipeService,
-    DataStorageService,
     RecipesResolverService,
     AuthService,
     AuthGuard,
